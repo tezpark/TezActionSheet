@@ -41,6 +41,9 @@ static const CGFloat smallSeparatorHeight = 1.0f;
 
 
 	// If already added this view, remove from super view.
+    for (id view in [self subviews]) {
+        [view removeFromSuperview];
+    }
 	[self removeFromSuperview];
 
 
