@@ -11,7 +11,7 @@ Custom singleton actionSheet with block completion.
 ![ios simulator screen shot 2015 5 31 9 22 47](https://cloud.githubusercontent.com/assets/389004/7901916/b6af6902-07db-11e5-8464-baeb41522deb.png)
 
 
-#Usage
+# Usage
 ```objective-c
 [[TezActionSheet sharedInstance] showActionSheetWithSelectButtonTitles:@[@"Button 1", @"Button 2", @"Button3"]
                                                      cancelButtonTitle:@"Cancel"
@@ -23,7 +23,7 @@ Custom singleton actionSheet with block completion.
 ```
 
 
-#License
+# License
 The MIT License (MIT)
 
 Copyright (c) 2015 Taesun Park
