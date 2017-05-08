@@ -60,11 +60,11 @@ static const CGFloat smallSeparatorHeight = 1.0f;
     self.frame = UIScreen.mainScreen.bounds;
     self.backgroundColor = UIColorFromRGBAlpha50(0x000000);
     self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-
-
+    
+    
     // Calculator contents height
     self.contentsHeight = (([selectButtonTitles count] * buttonHeight) + largeSeparatorHeight + buttonHeight);
-
+    
     // Make base view
     self.baseView = [[UIView alloc] init];
     CGRect baseViewFrame = self.bounds;
@@ -75,7 +75,7 @@ static const CGFloat smallSeparatorHeight = 1.0f;
     }
     baseViewFrame.size.height = _contentsHeight;
     _baseView.frame = baseViewFrame;
-
+    
     // Create select buttons
     for (NSInteger sIndex = 0; sIndex < selectButtonTitles.count; sIndex++) {
         UIButton *selBtn = [[UIButton alloc] initWithFrame:CGRectMake(0,
@@ -99,7 +99,7 @@ static const CGFloat smallSeparatorHeight = 1.0f;
             [_baseView addSubview:separator];
         }
     }
-
+    
     // Create separator between select buttons to cancel button
     UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0,
                                                                  selectButtonTitles.count * buttonHeight,
@@ -107,7 +107,7 @@ static const CGFloat smallSeparatorHeight = 1.0f;
                                                                  largeSeparatorHeight)];
     [separator setBackgroundColor:[UIColor blackColor]];
     [_baseView addSubview:separator];
-
+    
     // Create cancel button
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0,
                                                                      _baseView.frame.size.height - buttonHeight,
