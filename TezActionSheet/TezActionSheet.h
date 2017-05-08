@@ -34,6 +34,19 @@ typedef void (^ActionSheetCancelBlock) (void);
 - (void)showActionSheetWithSelectButtonTitles:(NSArray *)selectButtonTitles
                             cancelButtonTitle:(NSString *)cancelButtonTitle
                                   selectBlock:(ActionSheetSelectBlock)selectBlock
+                                  cancelBlock:(ActionSheetCancelBlock)cancelBlock;
+/**
+ *  Show action sheet with select & cancel button titles and select & cancel blocks.
+ *
+ *  @param selectButtonTitles Select button titles text
+ *  @param cancelButtonTitle  Cancel button title text
+ *  @param selectBlock        Select block (return selected index)
+ *  @param cancelBlock        Cancel block
+ *  @param enableAnimation    Check enable animation
+ */
+- (void)showActionSheetWithSelectButtonTitles:(NSArray *)selectButtonTitles
+                            cancelButtonTitle:(NSString *)cancelButtonTitle
+								  selectBlock:(ActionSheetSelectBlock)selectBlock
                                   cancelBlock:(ActionSheetCancelBlock)cancelBlock
                               enableAnimation:(BOOL)enableAnimation;
 
