@@ -18,6 +18,12 @@ static const CGFloat buttonHeight = 53.0f;
 static const CGFloat largeSeparatorHeight = 3.0f;
 static const CGFloat smallSeparatorHeight = 1.0f;
 
+@interface TezActionSheet ()
+@property (nonatomic, strong) UIView* baseView;
+@property (nonatomic, assign) BOOL enableAnimation;
+@property (nonatomic, assign) CGFloat contentsHeight;
+@end
+
 @implementation TezActionSheet
 
 #pragma mark - Singleton
@@ -35,65 +41,96 @@ static const CGFloat smallSeparatorHeight = 1.0f;
                             cancelButtonTitle:(NSString *)cancelButtonTitle
                                   selectBlock:(ActionSheetSelectBlock)selectBlock
                                   cancelBlock:(ActionSheetCancelBlock)cancelBlock {
+    [self showActionSheetWithSelectButtonTitles:selectButtonTitles
+                              cancelButtonTitle:cancelButtonTitle
+                                    selectBlock:selectBlock
+                                    cancelBlock:cancelBlock
+                                enableAnimation:NO];
+}
+
+- (void)showActionSheetWithSelectButtonTitles:(NSArray *)selectButtonTitles
+							cancelButtonTitle:(NSString *)cancelButtonTitle
+								  selectBlock:(ActionSheetSelectBlock)selectBlock
+								  cancelBlock:(ActionSheetCancelBlock)cancelBlock
+							  enableAnimation:(BOOL)enableAnimation {
 	// Setting blocks
 	self.selectBlock = selectBlock;
 	self.cancelBlock = cancelBlock;
 
-
+	// Setting enable animation
+	self.enableAnimation = enableAnimation;
+	
 	// If already added this view, remove from super view.
-    for (id view in [self subviews]) {
-        [view removeFromSuperview];
-    }
+	for (id view in [self subviews]) {
+		[view removeFromSuperview];
+	}
 	[self removeFromSuperview];
-
+	self.baseView = nil;
 
 	// Create background alpha view.
-	CGRect frame = CGRectMake(0.0, 0.0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height);
-	[self setFrame:frame];
+	self.frame = UIScreen.mainScreen.bounds;
 	self.backgroundColor = UIColorFromRGBAlpha50(0x000000);
 	self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
 
-	// Calculator originY
-	CGFloat originY = self.frame.size.height - (([selectButtonTitles count] * buttonHeight) + largeSeparatorHeight + buttonHeight);
-
+	// Calculator contents height
+	self.contentsHeight = (([selectButtonTitles count] * buttonHeight) + largeSeparatorHeight + buttonHeight);
+	
+	// Make base view
+	self.baseView = [[UIView alloc] init];
+	CGRect baseViewFrame = self.bounds;
+	if (enableAnimation) {
+		baseViewFrame.origin.y = baseViewFrame.size.height + _contentsHeight;
+	} else {
+		baseViewFrame.origin.y = baseViewFrame.size.height - _contentsHeight;
+	}
+	baseViewFrame.size.height = _contentsHeight;
+	_baseView.frame = baseViewFrame;
 
 	// Create select buttons
-	for (int sIndex = 0; sIndex < [selectButtonTitles count]; sIndex++) {
-		UIButton *selBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, originY + (sIndex * buttonHeight), self.frame.size.width, buttonHeight)];
+	for (NSInteger sIndex = 0; sIndex < selectButtonTitles.count; sIndex++) {
+		UIButton *selBtn = [[UIButton alloc] initWithFrame:CGRectMake(0,
+																	  sIndex * buttonHeight,
+																	  self.frame.size.width,
+																	  buttonHeight)];
 		[selBtn setBackgroundImage:[self imageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
 		[selBtn setBackgroundImage:[self imageWithColor:UIColorFromRGB(0x919191)] forState:UIControlStateHighlighted];
 		[selBtn setTitle:[selectButtonTitles objectAtIndex:sIndex] forState:UIControlStateNormal];
 		[selBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 		[selBtn addTarget:self action:@selector(onClickSelect:) forControlEvents:UIControlEventTouchUpInside];
 		[selBtn setTag:sIndex];
-		[self addSubview:selBtn];
+		[_baseView addSubview:selBtn];
 
 		if ((sIndex + 1) != [selectButtonTitles count]) {
-			UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(kMargin(20), CGRectGetMaxY(selBtn.frame) - smallSeparatorHeight, (self.frame.size.width - kMargin(20) * 2), smallSeparatorHeight)];
+			UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(kMargin(20),
+																		 CGRectGetMaxY(selBtn.frame) - smallSeparatorHeight,
+																		 (self.frame.size.width - kMargin(20) * 2),
+																		 smallSeparatorHeight)];
 			[separator setBackgroundColor:[UIColor blackColor]];
-			[self addSubview:separator];
+			[_baseView addSubview:separator];
 		}
 	}
 
-
 	// Create separator between select buttons to cancel button
-	UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - buttonHeight - largeSeparatorHeight, self.frame.size.width, largeSeparatorHeight)];
+	UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0,
+																 selectButtonTitles.count * buttonHeight,
+																 self.frame.size.width,
+																 largeSeparatorHeight)];
 	[separator setBackgroundColor:[UIColor blackColor]];
-	[self addSubview:separator];
-
-
+	[_baseView addSubview:separator];
 
 	// Create cancel button
-	UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, self.frame.size.height - buttonHeight, self.frame.size.width, buttonHeight)];
+	UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0,
+																	 _baseView.frame.size.height - buttonHeight,
+																	 self.frame.size.width,
+																	 buttonHeight)];
 	[cancelBtn setBackgroundImage:[self imageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
 	[cancelBtn setBackgroundImage:[self imageWithColor:UIColorFromRGB(0x919191)] forState:UIControlStateHighlighted];
 	[cancelBtn setTitle:cancelButtonTitle forState:UIControlStateNormal];
 	[cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	[cancelBtn addTarget:self action:@selector(onClickCancel) forControlEvents:UIControlEventTouchUpInside];
-	[self addSubview:cancelBtn];
-
-
+	[_baseView addSubview:cancelBtn];
+	[self addSubview:_baseView];
 
 	[self show];
 }
@@ -104,10 +141,36 @@ static const CGFloat smallSeparatorHeight = 1.0f;
 	UIWindow *topWindow = [[UIApplication sharedApplication] keyWindow];
 
 	[topWindow addSubview:self];
+	if (_enableAnimation) {
+		CGRect baseViewFrame = _baseView.frame;
+		baseViewFrame.origin.y = self.frame.size.height - _contentsHeight;
+		[UIView animateWithDuration:0.3
+							  delay:0.0
+							options:UIViewAnimationOptionCurveEaseOut
+						 animations:^{
+							 _baseView.frame = baseViewFrame;
+						 }
+						 completion:^(BOOL finished){
+						 }];
+	}
 }
 
 - (void)dismiss {
-	[self removeFromSuperview];
+	if (_enableAnimation) {
+		CGRect baseViewFrame = _baseView.frame;
+		baseViewFrame.origin.y = self.frame.size.height + _contentsHeight;
+		[UIView animateWithDuration:0.3
+							  delay:0.0
+							options:UIViewAnimationOptionCurveEaseOut
+						 animations:^{
+							 _baseView.frame = baseViewFrame;
+						 }
+						 completion:^(BOOL finished){
+							 [self removeFromSuperview];
+						 }];
+	} else {
+		[self removeFromSuperview];
+	}
 }
 
 #pragma mark - Click actions
