@@ -12,6 +12,7 @@ Custom singleton actionSheet with block completion.
 
 # Todo
 * Add - setting the button color function
+* Remove - 'NSString+TezSize' category class 
 
 # Usage
 ```objective-c
