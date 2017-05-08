@@ -11,8 +11,11 @@ Custom singleton actionSheet with block completion.
 ![ios simulator screen shot 2015 5 31 9 22 47](https://cloud.githubusercontent.com/assets/389004/7901916/b6af6902-07db-11e5-8464-baeb41522deb.png)
 
 # Todo
-* Add - setting the button color function
-* Remove - 'NSString+TezSize' category class 
+* Add
+  * setting the button color function
+* Remove 
+  * 'NSString+TezSize' category class
+  * 'UIImage+TezStretch' category class
 
 # Usage
 ```objective-c
