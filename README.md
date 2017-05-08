@@ -16,6 +16,7 @@ Custom singleton actionSheet with block completion.
 * Remove 
   * 'NSString+TezSize' category class
   * 'UIImage+TezStretch' category class
+  * image files
 
 # Usage
 ```objective-c
