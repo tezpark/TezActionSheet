@@ -32,8 +32,9 @@ typedef void (^ActionSheetCancelBlock) (void);
  *  @param cancelBlock        Cancel block
  */
 - (void)showActionSheetWithSelectButtonTitles:(NSArray *)selectButtonTitles
-                          cancelButtonTitle:(NSString *)cancelButtonTitle
-                                selectBlock:(ActionSheetSelectBlock)selectBlock
-                                  cancelBlock:(ActionSheetCancelBlock)cancelBlock;
+                            cancelButtonTitle:(NSString *)cancelButtonTitle
+                                  selectBlock:(ActionSheetSelectBlock)selectBlock
+                                  cancelBlock:(ActionSheetCancelBlock)cancelBlock
+                              enableAnimation:(BOOL)enableAnimation;
 
 @end

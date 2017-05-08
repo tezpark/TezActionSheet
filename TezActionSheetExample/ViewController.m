@@ -36,7 +36,8 @@
                                                                    NSLog(@"selcted button index : %ld", (long)index);
                                                                } cancelBlock:^{
                                                                    NSLog(@"cancel");
-                                                               }];
+                                                               }
+                                                           enableAnimation:YES];
 }
 
 - (void)didReceiveMemoryWarning {
