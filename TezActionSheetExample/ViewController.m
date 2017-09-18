@@ -34,9 +34,11 @@
                                                          cancelButtonTitle:@"Cancel"
                                                                selectBlock:^(NSInteger index) {
                                                                    NSLog(@"selcted button index : %ld", (long)index);
-                                                               } cancelBlock:^{
+                                                               }
+                                                               cancelBlock:^{
                                                                    NSLog(@"cancel");
-                                                               }];
+                                                               }
+                                                           enableAnimation:YES];
 }
 
 - (void)didReceiveMemoryWarning {

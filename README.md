@@ -1,3 +1,7 @@
+[![GitHub platform](https://img.shields.io/badge/platform-ios-lightgrey.svg)]() 
+[![GitHub language](https://img.shields.io/badge/language-objective--c-6BAEE4.svg)]()
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/tezpark/AlternateIconName-objC/master/LICENSE)
+
 # TezActionSheet
 Custom singleton actionSheet with block completion.
 
@@ -6,20 +10,29 @@ Custom singleton actionSheet with block completion.
 
 ![ios simulator screen shot 2015 5 31 9 22 47](https://cloud.githubusercontent.com/assets/389004/7901916/b6af6902-07db-11e5-8464-baeb41522deb.png)
 
+# Todo
+* Add
+  * setting the button color function
+* Remove 
+  * 'NSString+TezSize' category class
+  * 'UIImage+TezStretch' category class
+  * image files
 
-#Usage
+# Usage
 ```objective-c
 [[TezActionSheet sharedInstance] showActionSheetWithSelectButtonTitles:@[@"Button 1", @"Button 2", @"Button3"]
                                                      cancelButtonTitle:@"Cancel"
                                                            selectBlock:^(NSInteger index) {
                                                                NSLog(@"selcted button index : %ld", (long)index);
-                                                           } cancelBlock:^{
+                                                           }
+                                                           cancelBlock:^{
                                                                NSLog(@"cancel");
-                                                           }];
+                                                           }
+                                                       enableAnimation:YES];
 ```
 
 
-#License
+# License
 The MIT License (MIT)
 
 Copyright (c) 2015 Taesun Park
